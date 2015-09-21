@@ -1,0 +1,22 @@
+{
+  "name": "ticTacToe",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/mrm58/betamore_bewd_f2015",
+  "authors": [
+    "mrm58 <matthew.meister@gmail.com>"
+  ],
+  "description": "Tic Tac Toe Web",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.5",
+    "bootstrap": "~3.3.5"
+  }
+}

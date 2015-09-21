@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    include ./includes/bower_bootstrap.jade
+    title Hello world!
+  body
+    h3 Hello denizens
+    h3 The path you are taking will lead to
+    h1 CERTAIN DESTRUCTION!
+
+    form(name="game", action="/game", method="post")
+        input(type="text", name="username")
+        input(type="submit")

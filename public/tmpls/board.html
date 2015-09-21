@@ -1,0 +1,17 @@
+<div class="container">
+  <table class="table table-hover table-striped table-bordered">
+    <tr ng-init="rowInd=$index" ng-repeat="tableRow in vm.theBoard track by $index">
+      <td ng-click="vm.makeYourMove(rowInd, $index); vm.isWinningBoard()" ng-repeat="tableEntry in tableRow track by $index">
+        {{ tableEntry }}
+      </td>
+    </tr>
+  </table>
+  <button class="btn btn-default" ng-click="vm.makeComputerMove(); vm.isWinningBoard();">
+  	Get Opponent Move
+  </button>
+  <button class="btn btn-default" ng-click="vm.resetBoard()">
+    Reset!
+  </button>
+  <label>And the weiner is...{{ gameWinner }}</label>
+  <p></p>
+</div>
