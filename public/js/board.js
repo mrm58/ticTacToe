@@ -2,13 +2,13 @@ angular.module('bewd.tictactoe.board', []);
 //second argument is for dependencies (we don't need any now since were just using angular)
 
 angular.module('bewd.tictactoe.board')
-  .controller('BoardCtrl', ['$scope', function($scope){
-    $scope.playerMove = true;
-    $scope.gameWinner = 'No one yet!';
-    $scope.gameOver = false;
+  .controller('BoardCtrl', function(){
+    this.playerMove = true;
+    this.gameWinner = 'No one yet!';
+    this.gameOver = false;
 
     this.makeComputerMove = function makeComputerMove() {
-      if(($scope.playerMove === false) && ($scope.gameOver === false))
+      if((this.playerMove === false) && (this.gameOver === false))
       {
         for (var i = this.theBoard.length - 1; i >= 0; i--) 
         {
@@ -17,7 +17,7 @@ angular.module('bewd.tictactoe.board')
             if((this.theBoard[i][j] !== 'O') && (this.theBoard[i][j] !== 'X'))
             {
               this.theBoard[i][j] = 'O';
-              $scope.playerMove = true;
+              this.playerMove = true;
               i = -1;
               j = -1;
             };
@@ -27,10 +27,10 @@ angular.module('bewd.tictactoe.board')
     };
 
     this.makeYourMove = function makeYourMove(row, col) {
-      if(($scope.gameOver === false) && ($scope.playerMove === true) && (this.theBoard[row][col] !== 'O') && (this.theBoard[row][col] !== 'X'))
+      if((this.gameOver === false) && (this.playerMove === true) && (this.theBoard[row][col] !== 'O') && (this.theBoard[row][col] !== 'X'))
       {
         this.theBoard[row][col] = 'X';
-        $scope.playerMove = false;
+        this.playerMove = false;
       }
     };
 
@@ -40,55 +40,55 @@ angular.module('bewd.tictactoe.board')
       {
         if ((this.theBoard[i][0] === this.theBoard[i][1]) &&
             (this.theBoard[i][1] === this.theBoard[i][2]) &&
-            (this.theBoard[i][0] != ''))
+            ((this.theBoard[i][0] === 'X') || (this.theBoard[i][0] === 'O')))
         {
-          $scope.gameOver = true;
-          $scope.gameWinner = this.theBoard[i][0];
+          this.gameOver = true;
+          this.gameWinner = this.theBoard[i][0];
           break;
         };
       };
-      if($scope.gameOver === false)
+      if(this.gameOver === false)
       {
         for (var i = this.theBoard[0].length - 1; i >= 0; i--) 
         {
           if ((this.theBoard[0][i] === this.theBoard[1][i]) &&
               (this.theBoard[1][i] === this.theBoard[2][i]) &&
-              (this.theBoard[0][i] != ''))
+              ((this.theBoard[0][i] === 'X') || (this.theBoard[0][i] === 'O')))
           {
-            $scope.gameOver = true;
-            $scope.gameWinner = this.theBoard[0][i];
+            this.gameOver = true;
+            this.gameWinner = this.theBoard[0][i];
             break;
           };
         };
       };
-      if($scope.gameOver === false)
+      if(this.gameOver === false)
       {
           if ((this.theBoard[0][0] === this.theBoard[1][1]) &&
               (this.theBoard[1][1] === this.theBoard[2][2]) &&
-              (this.theBoard[0][0] != ''))
+              ((this.theBoard[0][0] === 'X') || (this.theBoard[0][0] === 'O')))
           {
-            $scope.gameWinner = this.theBoard[0][0];
-            $scope.gameOver = true;
+            this.gameWinner = this.theBoard[0][0];
+            this.gameOver = true;
           }
           else if ((this.theBoard[0][2] === this.theBoard[1][1]) &&
                    (this.theBoard[1][1] === this.theBoard[2][0]) &&
-                   (this.theBoard[0][2] != ''))
+                   ((this.theBoard[0][2] === 'X') || (this.theBoard[0][2] === 'O')))
           {
-            $scope.gameWinner = this.theBoard[0][2];
-            $scope.gameOver = true;
+            this.gameWinner = this.theBoard[0][2];
+            this.gameOver = true;
           };
       };
       //return winning;
     };
 
     this.resetBoard = function resetBoard() {
-      this.theBoard = [ [ '', '', ''], ['', '', ''], ['', '', '']];
-      $scope.gameWinner = 'No one yet!';
-      $scope.playerMove = true;
-      $scope.gameOver = false;
+      this.theBoard = [ [ ' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' ']];
+      this.gameWinner = 'No one yet!';
+      this.playerMove = true;
+      this.gameOver = false;
     };
 
-  }])
+  })
   .directive('ticTacToeBoard', function() {
     return {
       scope: {

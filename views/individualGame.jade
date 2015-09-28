@@ -7,3 +7,4 @@ html(lang="en" ng-app="bewd.tictactoe.board")
     div.container
         h1 Game ##{board.id}
         tic-tac-toe-board(the-board="#{JSON.stringify(board.board)}")
+        form(name="saveGame", action="/games/:board.id", method="post")

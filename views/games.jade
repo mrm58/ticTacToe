@@ -10,3 +10,12 @@ html(lang="en" ng-app="bewd.tictactoe.board")
             each board in boards
                 li
                     a(href="/games/#{board.id}") Game ##{board.id}
+        h2 Create a New Game!
+        form(name="newGame", action="/games", method="post")
+            div.form-group
+                label New Board Config
+                input.form-control(type="text", name="board")
+                button.btn.btn-default(type="submit") Create!
+                if(errors)
+                    p.text-danger Initial board state must consiste of exactly 9 characters of which only [XO ] are allowed
+                    code= errors.message
