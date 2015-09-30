@@ -18,6 +18,7 @@ var sequelize = new Sequelize(
 var store = new SequelizeStore({ db: sequelize });
 store.sync();
 
+
 app.use(cookieParser());
 app.use(session({
     saveUninitialized: false,
@@ -25,6 +26,8 @@ app.use(session({
     secret: 'I see dead people',
     store: store
 }));
+
+app.use(require('flash')());
 
 app.use('/bower_components',
         express.static(__dirname + '/bower_components'));
@@ -54,7 +57,12 @@ app.post('/game', function(req, res) {
 
 app.get('/games', function(req, res) {
     models.Board.findAll().then(function(boards) {
-        res.render('games', { boards: boards });
+        if (req.session.user_id) {
+          models.User.findById(req.session.user_id).then(function(user) {
+            res.render('games', { boards: boards, user: user });
+          })
+        }
+            // res.render('games', { boards: boards });
     });
 });
 
@@ -78,20 +86,54 @@ app.get('/games/:game_id', function(req, res) {
     });
 });
 
-//test update
+// app.post('/games/:game_id', function(req, res) {
+//     models.Board.findById(req.params.game_id).then(function(board) {
+//         board.updateAttributes({
+//             board: req.params.board
+//         });
+//     });
+//     // models.Board.update({id: req.body.board.id, board: req.body.board })
+//     //     .then(function(board) {
+//     //         res.redirect('/games/');
+//     //     })
+// });
 
-app.post('/games/:game_id', function(req, res) {
-    models.Board.findById(req.params.game_id).then(function(board) {
-        board.updateAttributes({
-            board: req.params.board
-        });
-    });
-    // models.Board.update({id: req.body.board.id, board: req.body.board })
-    //     .then(function(board) {
-    //         res.redirect('/games/');
-    //     })
+//User Registration section
+app.get('/register', function(req, res) {
+    res.render('register');
 });
 
+app.post('/register', function(req, res) {
+  //res.send(JSON.stringify(req.body));
+  models.User.find( { where: { username: req.body.username } } )
+    .then(function(user) {
+      if(user) {
+        req.flash('warning', "Username already exists");
+        req.session.save(function() {
+          res.redirect('/register');
+        });
+      } else {
+        models.User.create(req.body)  //Assumes the parameter names match the DB column names
+          .then(function(newUser) {
+            req.session.user_id = newUser.id;
+            req.session.save(function() {
+              res.redirect('/games');
+            });
+          });
+        // req.flash('warning', "Username does NOT already exist! YAY!");
+        // req.session.save(function() {
+        //   res.redirect('/register');
+        // });
+      }
+      //res.send(JSON.stringify(user));
+    });
+});
+
+//Login page -> game w/ session
+// /users list
+//logout page -> req.session.destroy(function(){...})
+//req.params uses parameters on the URL
+//req.body uses parameters that are passed via the post
 
 var server = app.listen(3000, function() 
 {
