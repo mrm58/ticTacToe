@@ -1,0 +1,13 @@
+doctype html
+html
+  head
+    block title
+
+    include ./includes/bower_bootstrap.jade
+    include ./includes/header.jade
+
+  body
+    include ./includes/flash.jade
+    div.container-fluid
+      div.well
+        block content

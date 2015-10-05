@@ -1,0 +1,12 @@
+extends ./layout.jade
+
+block title
+  title Logout of Tic Tac Toe!
+
+block content
+  if(errors)
+    h1.text-danger There seems to have been an error in logging out.  Please try again.
+    code= errors.message;
+  else
+    h1 You have been successfully logged out.
+    p Thanks for playing!

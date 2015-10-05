@@ -1,13 +1,14 @@
-doctype html
-html
-  head
-    include ./includes/bower_bootstrap.jade
-    title Hello world!
-  body
-    h3 Hello denizens
-    h3 The path you are taking will lead to
-    h1 CERTAIN DESTRUCTION!
+extends ./layout.jade
 
-    form(name="game", action="/game", method="post")
-        input(type="text", name="username")
-        input(type="submit")
+block title
+  title Tic Tac Toe!
+
+block content
+  div.content-fluid
+    h1 TIC beTACmore TOE!
+    h5 New user?  Register 
+      a(href="/register") here
+      | !
+    h5 Already have an account?  Log in 
+      a(href="/login") here
+      | !

@@ -1,18 +1,18 @@
-doctype html
-html
-  head
-    include ./includes/bower_bootstrap.jade
-    title Register for Tic Tac Toe!
-  body
-    include ./includes/flash.jade
-    div.container
-      h1 Register As a New User
+extends ./layout.jade
 
-      form(name="newUserRegister", action="/register", method="post")
-        div.form-group
-          label Username:
-          input.form-control(type="text", name="username")
-        div.form-group
-          label Password:
-          input.form-control(type="password", name="password")
-        button.btn.btn-default(type="submit") Register!
+block title
+  title Register for Tic Tac Toe!
+
+block content
+  h1 Register As a New User
+
+  form(name="newUserRegister", action="/register", method="post")
+    div.form-group
+      label Username
+      input.form-control(type="text", name="username")
+      label Password
+      input.form-control(type="password", name="password")
+    button.btn.btn-default(type="submit") Register!
+    p Already registered?  Log in 
+      a(href="/login") here
+      | !
