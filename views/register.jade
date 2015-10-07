@@ -7,11 +7,32 @@ block content
   h1 Register As a New User
 
   form(name="newUserRegister", action="/register", method="post")
-    div.form-group
-      label Username
-      input.form-control(type="text", name="username")
-      label Password
-      input.form-control(type="password", name="password")
+    div.form-group(ng-class="{ 'has-error': newUserRegister.email.$invalid && newUserRegister.email.$dirty }")
+      label.control-label Email
+      input.form-control(type="email", name="email", required, ng-model="email", ng-model-options="{ updateOn: 'default blur', debounce: { blur: 0, default: 500 } }")
+
+      div(ng-if="newUserRegister.email.$dirty && newUserRegister.email.$error")
+        div.alert.alert-danger(ng-messages="newUserRegister.email.$error")
+          p(ng-message="required") Email is required
+          p(ng-message="email") Valid email format is required (something@something)
+
+    div.form-group(ng-class="{ 'has-error': newUserRegister.username.$invalid && newUserRegister.username.$dirty }")
+      label.control-label Username
+      input.form-control(type="text", name="username", required, ng-model="username", unique-username) 
+      //, ng-model-options="{ updateOn: 'blur' }")
+
+      div(ng-if="newUserRegister.username.$dirty && newUserRegister.username.$error")
+        div.alert.alert-danger(ng-messages="newUserRegister.username.$error")
+          p(ng-message="required") Username is required
+          p(ng-message="uniqueUsername") That username is already taken.
+
+    div.form-group(ng-class="{ 'has-error': newUserRegister.password.$invalid && newUserRegister.password.$dirty }")
+      label.control-label Password
+      input.form-control(type="password", name="password", required, ng-model="password")
+
+      div.alert.alert-warning(ng-if="newUserRegister.password.$error.required && newUserRegister.password.$dirty")
+        p Password is required
+
     button.btn.btn-default(type="submit") Register!
     p Already registered?  Log in 
       a(href="/login") here

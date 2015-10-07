@@ -16,10 +16,10 @@ app.get('/', function(req, res) {
 });
 
 app.post('/', function(req, res) {
-  User.find( {where: { 
+  User.find( {where: {
                 username: req.body.username,
                 password: req.body.password
-                } 
+                }
               }
             )
     .then(function(user) {
@@ -34,7 +34,7 @@ app.post('/', function(req, res) {
         //   res.redirect('/login');
         // });
       } else {
-        res.render('login', { errors: true } )
+        res.render('login', { errors: true } );
       }
     });
 });

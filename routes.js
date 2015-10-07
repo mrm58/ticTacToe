@@ -36,6 +36,10 @@ app.use('/games', require('./routes/games'));
 
 app.use('/login', require('./routes/login'));
 
+app.use('/users', require('./routes/users'));
+
+app.use('/register', require('./routes/register'));
+
 //Logout section
 app.get('/logout', function(req, res) {
   if (req.currentUser) {
@@ -46,44 +50,6 @@ app.get('/logout', function(req, res) {
   } else {
     res.render('games');
   }
-});
-
-//Users section
-app.get('/users/', function(req, res) {
-  models.User.findAll().then(function(users) {
-    res.render('users', { users: users });
-  });
-});
-
-//User Registration section
-app.get('/register', function(req, res) {
-  res.render('register');
-});
-
-app.post('/register', function(req, res) {
-  //res.send(JSON.stringify(req.body));
-  models.User.find( { where: { username: req.body.username } } )
-    .then(function(user) {
-      if(user) {
-        req.flash('warning', "Username already exists");
-        req.session.save(function() {
-          res.redirect('/register');
-        });
-      } else {
-        models.User.create(req.body)  //Assumes the parameter names match the DB column names
-          .then(function(newUser) {
-            req.session.user_id = newUser.id;
-            req.session.save(function() {
-              res.redirect('/games');
-            });
-          });
-        // req.flash('warning', "Username does NOT already exist! YAY!");
-        // req.session.save(function() {
-        //   res.redirect('/register');
-        // });
-      }
-      //res.send(JSON.stringify(user));
-    });
 });
 
 module.exports = app;

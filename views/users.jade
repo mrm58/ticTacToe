@@ -6,18 +6,15 @@ block title
 block content
   div.container
     h1 All the Players!
+    div.form-group
+      label Search for a specific user:
+      input.form-control(type="text" ng-model="nameFilter")
     ul
       if(users)
         each user in users
           li
             a(href="#") #{user.username}
-  //-
-    h2 Create a New Game!
-    form(name="newGame", action="/games", method="post")
-      div.form-group
-      label New Board Config
-        input.form-control(type="text", name="board")
-        button.btn.btn-default(type="submit") Create!
-        if(errors)
-          p.text-danger Initial board state must consiste of exactly 9 characters of which only [XO ] are allowed
-          code= errors.message
+      //-
+        each user in users
+          li(ng-repeat="username in #{user.username} | filter:nameFilter track by $index ")
+            a(href="#") {{username}}
