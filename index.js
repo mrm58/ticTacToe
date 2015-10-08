@@ -31,7 +31,7 @@ app.use(require('flash')());
 
 app.use('/bower_components',
         express.static(__dirname + '/bower_components'));
-app.use('/public', express.static(__dirname + '/public'))
+app.use('/public', express.static(__dirname + '/public'));
 
 app.use(bodyParser.urlencoded( {extended: false} ));
 
@@ -46,7 +46,7 @@ app.use(require('./routes'));
 //req.params uses parameters on the URL
 //req.body uses parameters that are passed via the post
 
-var server = app.listen(3000, function() 
+var server = app.listen(3000, function()
 {
   var host = server.address().address;
   var port = server.address().port;

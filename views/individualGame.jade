@@ -4,14 +4,15 @@ block title
   title Game ##{board.id}!
 
 block content
-
-doctype html
-html(lang="en" ng-app="bewd.tictactoe.board")
-  head
-    include ./includes/bower_bootstrap.jade
-    title  Game ##{board.id}!
-  body
     div.container
         h1 Game ##{board.id}
         tic-tac-toe-board(the-board="#{JSON.stringify(board.board)}")
+
+        form(action="/games/#{board.id}", method="post")
+          div.form-group
+            label.control-label New Game State
+            input.form-control(type="text", name="board", value="#{board.board.map(function(b) { return b.join(''); }).join('')}")
+            button.btn.btn-success(type="submit") Update board
+
+
         form(name="saveGame", action="/games/:board.id", method="post")

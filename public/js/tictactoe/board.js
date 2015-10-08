@@ -1,4 +1,4 @@
-angular.module('bewd.tictactoe.board', []); 
+angular.module('bewd.tictactoe.board', []);
 //second argument is for dependencies (we don't need any now since were just using angular)
 
 angular.module('bewd.tictactoe.board')
@@ -10,9 +10,9 @@ angular.module('bewd.tictactoe.board')
     this.makeComputerMove = function makeComputerMove() {
       if((this.playerMove === false) && (this.gameOver === false))
       {
-        for (var i = this.theBoard.length - 1; i >= 0; i--) 
+        for (var i = this.theBoard.length - 1; i >= 0; i--)
         {
-          for (var j = this.theBoard[i].length - 1; j >= 0; j--) 
+          for (var j = this.theBoard[i].length - 1; j >= 0; j--)
           {
             if((this.theBoard[i][j] !== 'O') && (this.theBoard[i][j] !== 'X'))
             {
@@ -20,10 +20,10 @@ angular.module('bewd.tictactoe.board')
               this.playerMove = true;
               i = -1;
               j = -1;
-            };
-          };
-        };
-      };
+            }
+          }
+        }
+      }
     };
 
     this.makeYourMove = function makeYourMove(row, col) {
@@ -34,9 +34,9 @@ angular.module('bewd.tictactoe.board')
       }
     };
 
-    this.isWinningBoard = function isWinningBoard() 
+    this.isWinningBoard = function isWinningBoard()
     {
-      for (var i = this.theBoard.length - 1; i >= 0; i--) 
+      for (var i = this.theBoard.length - 1; i >= 0; i--)
       {
         if ((this.theBoard[i][0] === this.theBoard[i][1]) &&
             (this.theBoard[i][1] === this.theBoard[i][2]) &&
@@ -45,11 +45,11 @@ angular.module('bewd.tictactoe.board')
           this.gameOver = true;
           this.gameWinner = this.theBoard[i][0];
           break;
-        };
-      };
+        }
+      }
       if(this.gameOver === false)
       {
-        for (var i = this.theBoard[0].length - 1; i >= 0; i--) 
+        for (var i = this.theBoard[0].length - 1; i >= 0; i--)
         {
           if ((this.theBoard[0][i] === this.theBoard[1][i]) &&
               (this.theBoard[1][i] === this.theBoard[2][i]) &&
@@ -58,9 +58,9 @@ angular.module('bewd.tictactoe.board')
             this.gameOver = true;
             this.gameWinner = this.theBoard[0][i];
             break;
-          };
-        };
-      };
+          }
+        }
+      }
       if(this.gameOver === false)
       {
           if ((this.theBoard[0][0] === this.theBoard[1][1]) &&
@@ -76,8 +76,8 @@ angular.module('bewd.tictactoe.board')
           {
             this.gameWinner = this.theBoard[0][2];
             this.gameOver = true;
-          };
-      };
+          }
+      }
       //return winning;
     };
 
@@ -101,3 +101,73 @@ angular.module('bewd.tictactoe.board')
       bindToController: true
     };
   });
+
+angular.module('bewd.tictactoe.board')
+  .factory('boardService', ['$http', function($http) {
+    return {
+      getBoards: function() {
+        return $http.get('/games')
+          .then(function(response) {
+            return response.data;
+          });
+      },
+      getBoard: function(id) {
+        return $http.get('/games/' + id)
+          .then(function(response) {
+            return response.data;
+          });
+      },
+      updateBoard: function(id, board) {
+        return $http.put('/games' + id, { board:board })
+          .then(function(response) {
+            return response.data;
+          });
+      }
+    };
+  }])
+  .controller('BoardsController', BoardsController);
+
+  BoardsController.$inject = ['boardService','$interval', '$log'];
+  function BoardsController(boardService, $interval, $log) {
+    var vm = this;
+
+    var selectedBoardId;
+    var boardRefresher;
+
+    vm.selectBoard = function selectBoard(board) {
+      vm.selectedBoard = board;
+
+      if(boardRefresher) {
+        $interval.cancel(boardRefresher);
+      }
+      boardRefresher = $interval(function() {
+        boardService.getBoard(board.id).then(function(b) {
+          vm.selectedBoard = b;
+        });
+      }, 1000);
+    };
+
+    function loadBoards() {
+      boardService.getBoards().then(function(boards) {
+        vm.boards = boards;
+        if(selectedBoard) {
+          angular.forEach(vm.boards, function(b) {
+            if(b.id === selectedBoardId) {
+              vm.selectedBoard = b;
+            }
+          });
+        }
+      });
+    }
+
+    loadBoards();
+    $interval(loadBoards, 5000);
+    // $interval(function() {
+    //   if(vm.selectedBoard) {
+    //     boardService.getBoard(vm.selectedBoard.id)
+    //       .then(function(board) {
+    //         vm.selectedBoard = board;
+    //       });
+    //   }
+    // }, 1000);
+  }

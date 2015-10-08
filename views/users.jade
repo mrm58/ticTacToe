@@ -15,6 +15,6 @@ block content
           li
             a(href="#") #{user.username}
       //-
-        each user in users
-          li(ng-repeat="username in #{user.username} | filter:nameFilter track by $index ")
-            a(href="#") {{username}}
+        ul(ng-controller="BoardsController as userList")
+          li(ng-repeat="username in userList.username track by userList.id")
+            a(href="/games/{{ board.id }}") Game {{ '#' + board.id }}
