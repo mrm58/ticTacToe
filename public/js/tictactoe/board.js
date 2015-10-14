@@ -27,7 +27,10 @@ angular.module('bewd.tictactoe.board')
     };
 
     this.makeYourMove = function makeYourMove(row, col) {
-      if((this.gameOver === false) && (this.playerMove === true) && (this.theBoard[row][col] !== 'O') && (this.theBoard[row][col] !== 'X'))
+      if((this.gameOver === false) &&
+         (this.playerMove === true) &&
+         (this.theBoard[row][col] !== 'O') &&
+         (this.theBoard[row][col] !== 'X'))
       {
         this.theBoard[row][col] = 'X';
         this.playerMove = false;

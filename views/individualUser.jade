@@ -1,0 +1,10 @@
+extends ./layout.jade
+
+block title
+  title #{user.username}'s Profile
+
+block content
+  div.container
+    h1 #{user.username}
+    p Password: #{user.password}
+    p Email: #{user.email}

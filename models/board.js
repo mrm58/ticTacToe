@@ -4,9 +4,11 @@ module.exports = function(sequelize, DataTypes) {
     board: {
       type: DataTypes.STRING,
       get: function() {
-        return this.getDataValue('board').match(/.{3}/g).map(function(row) {
-          return row.split('');
-        });
+        return this.getDataValue('board')
+          .match(/.{3}/g)
+          .map(function(row) {
+            return row.split('');
+          });
       },
       validate: {
         len: 9,
@@ -15,11 +17,15 @@ module.exports = function(sequelize, DataTypes) {
           msg: 'Must be a valid tic tac toe board'
         }
       }
+          // set: function(boardArray) {
+          //     this.setDataValue(boardArray.map(function(row) { return row.join(''); } ).join(''));
+          // }
     }
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        Board.belongsTo(models.User, { as: 'XPlayer', foreignKey: 'xPlayerId' });
+        Board.belongsTo(models.User, { as: 'OPlayer', foreignKey: 'oPlayerId' });
       }
     }
   });

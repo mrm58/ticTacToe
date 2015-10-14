@@ -21,7 +21,8 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        User.hasMany(models.Board, { as: 'XPlayer', foreignKey: 'xPlayerId' });
+        User.hasMany(models.Board, { as: 'OPlayer', foreignKey: 'oPlayerId' });
       }
     }
   });
