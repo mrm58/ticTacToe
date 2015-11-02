@@ -18,7 +18,7 @@ nav.navbar.navbar-default.navbar-inverse
           a(href="/users/") Users
         if(currentUser)
           li 
-            a(href="#") #{currentUser.username}
+            a(href="/users/#{currentUser.username}") #{currentUser.username}
           li
             a(href="/logout") Logout
         else

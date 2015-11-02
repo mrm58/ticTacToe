@@ -90,7 +90,9 @@ angular.module('bewd.tictactoe.board')
       this.playerMove = true;
       this.gameOver = false;
     };
-
+    //this.makeYourMove = function makeYourMove() {
+      //this.theBoard[2][2] = 'Y';
+    //};
   })
   .directive('ticTacToeBoard', function() {
     return {
@@ -109,6 +111,7 @@ angular.module('bewd.tictactoe.board')
   .factory('boardService', ['$http', function($http) {
     return {
       getBoards: function() {
+        // AJAX request
         return $http.get('/games')
           .then(function(response) {
             return response.data;
@@ -121,7 +124,7 @@ angular.module('bewd.tictactoe.board')
           });
       },
       updateBoard: function(id, board) {
-        return $http.put('/games' + id, { board:board })
+        return $http.put('/games/' + id, { board:board })
           .then(function(response) {
             return response.data;
           });
@@ -130,17 +133,15 @@ angular.module('bewd.tictactoe.board')
   }])
   .controller('BoardsController', BoardsController);
 
-  BoardsController.$inject = ['boardService','$interval', '$log'];
+  BoardsController.$inject = ['boardService', '$interval', '$log'];
   function BoardsController(boardService, $interval, $log) {
     var vm = this;
 
-    var selectedBoardId;
     var boardRefresher;
-
     vm.selectBoard = function selectBoard(board) {
       vm.selectedBoard = board;
 
-      if(boardRefresher) {
+      if (boardRefresher) {
         $interval.cancel(boardRefresher);
       }
       boardRefresher = $interval(function() {
@@ -152,25 +153,23 @@ angular.module('bewd.tictactoe.board')
 
     function loadBoards() {
       boardService.getBoards().then(function(boards) {
+        $log.debug("boards response is ", boards);
         vm.boards = boards;
-        if(selectedBoard) {
-          angular.forEach(vm.boards, function(b) {
-            if(b.id === selectedBoardId) {
-              vm.selectedBoard = b;
-            }
-          });
-        }
       });
     }
 
     loadBoards();
-    $interval(loadBoards, 5000);
-    // $interval(function() {
-    //   if(vm.selectedBoard) {
-    //     boardService.getBoard(vm.selectedBoard.id)
-    //       .then(function(board) {
-    //         vm.selectedBoard = board;
-    //       });
-    //   }
-    // }, 1000);
+    $interval(loadBoards, 10000);
   }
+
+angular.module('bewd.tictactoe.board')
+  // .controller('BoardController', function(boardService, $routeParams) {
+  //   console.log($routeParams);
+  //   var vm = this;
+  //   boardService.getBoard($routeParams.id).then(function(board) {
+  //     vm.theBoard = board.board;
+  //   });
+  // });
+  .controller('BoardController', function(boardObj) {
+    this.theBoard = boardObj.board;
+  });

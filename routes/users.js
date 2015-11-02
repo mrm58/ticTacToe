@@ -1,8 +1,8 @@
-
+// routes/users.js
 var express = require('express');
 var router = express.Router();
 
-var User = require('../models').User;
+var user = require('../models').user;
 
 var accepts = {
   'json': 'application/json',
@@ -15,7 +15,7 @@ router.param('format', function checkFormat(req, res, next, param) {
 });
 
 router.param('username', function(req, res, next) {
-  User.findOne({ where: { username: req.params.username } })
+  user.findOne({ where: { username: req.params.username } })
     .then(function(user) {
       if(user) {
         req.user = res.locals.user = user;
@@ -28,7 +28,7 @@ router.param('username', function(req, res, next) {
 
 //Query for checking if a username exists in the User db or not
 router.get('/usernameExists', function(req, res) {
-  User.findOne({ where: { username: req.query.username } })
+  user.findOne({ where: { username: req.query.username }})
     .then(function(user) {
       if (user) {
         res.json(true);
@@ -40,36 +40,44 @@ router.get('/usernameExists', function(req, res) {
 
 //Users section
 router.get('/', function(req, res) {
-  User.findAll().then(function(userList) {
+  user.findAll().then(function(userList) {
     res.render('users', { users: userList });
   });
 });
-// router.get('/', function(req, res) {
-//   User.findAll( { attributes: ['username'] } ).then(function(users) {
-//     res.render('users', { users: users });
-//   });
-// });
+
+//Verify user section
+router.get('/verify', function(req, res) {
+  user.findOne( { where: {emailKey: req.query.k } } )
+    .then(function(user) {
+      if(user) {
+        user.markVerified();
+        req.session.user_id = user.id;
+        req.session.save(function() {
+          res.render('verified', { user: user });
+        });
+      } else {
+        req.flash('warning', 'Verification key not found');
+        res.redirect('/register');
+      }
+    });
+});
 
 //Individual user section
-
-//router.get('/:username.:format?', function(req, res) {
-router.get('/:username', function(req, res) {
-  //User.findOne({ where: { username: req.params.username } })
-  //  .then(function(user) {
+router.get('/:username.:format?', function(req, res) {
+//router.get('/:username', function(req, res) {
+  user.findOne({ where: { username: req.params.username } })
+    .then(function(user) {
       res.format({
-        html: function() {
-          res.render('individualUser');
-        },
-        json: function() {
-          res.json(req.user);
-        }
+       html: function() {
+          res.render('individualUser', { user: user });
+       },
+       json: function() {
+         res.json(user);
+       }
       });
-  //});
-
-    // Board.findById(req.params.game_id).then(function(board) {
-    //     res.render('individualGame', { board: board });
-    // });
+  });
 });
+
 
 
 module.exports = router;

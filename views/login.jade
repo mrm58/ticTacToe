@@ -2,7 +2,7 @@ extends ./layout.jade
 
 block title
   title Login to Tic Tac Toe!
-
+  
 block content
   h1 Login Information
 
@@ -16,6 +16,6 @@ block content
     if(errors)
       p.text-danger Username/Password combination unrecognized
       //code= errors.message
-    p Not registered?  Do so 
-      a(href="/register") here
-      | !
+  p Not registered?  Do so 
+    a(href="/register") here
+    | !

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var User = sequelize.define('User', {
+  var user = sequelize.define('user', {
     username: DataTypes.STRING,
     // username: {
     //   //DataTypes.STRING,
@@ -17,14 +17,61 @@ module.exports = function(sequelize, DataTypes) {
     //   }
     // },
     password: DataTypes.STRING,
-    email: DataTypes.STRING
+    email: DataTypes.STRING,
+    emailKey: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
-        User.hasMany(models.Board, { as: 'XPlayer', foreignKey: 'xPlayerId' });
-        User.hasMany(models.Board, { as: 'OPlayer', foreignKey: 'oPlayerId' });
+        user.hasMany(models.board, { as: 'XPlayer', foreignKey: 'xPlayerId' });
+        user.hasMany(models.board, { as: 'OPlayer', foreignKey: 'oPlayerId' });
+      },
+      findByEmailKey: function(key) {
+        return user.find( { emailKey: key } );
       }
+    },
+    instanceMethods: {
+      getBoards: function() {
+        return sequelize.Promise.all([
+          (this.XPlayer || this.getXPlayer()),
+          (this.OPlayer || this.getOPlayer())
+        ]).then(function(boards) {
+          return boards.reduce(function(a, b) { return a.concat(b); }, []);
+        });
+      },
+      isEmailVerified: function() {
+        return !this.emailKey;
+      },
+      markVerified: function() {
+        return this.update( { emailKey: null } );
+      }
+    },
+    scopes: {
+      knownValues: {
+        where: {
+          id: 1
+        }
+      },
+      withBoards: function() {
+        return {
+          include: [
+            { association: user.associations.XPlayer },
+            { association: user.associations.OPlayer }
+          ]
+        };
+      }
+    },
+    hooks: {
+      beforeCreate: function(user) {
+        user.emailKey = require('crypto').randomBytes(32).toString('hex');
+      },
+      afterCreate: [
+        function(user) {
+          console.log('Created user: ', user.username);
+          console.log('I am sending an email to user with ', user.emailKey);
+          //require('../emails').sendUserVerificationEmail(user);
+        }
+      ]
     }
   });
-  return User;
+  return user;
 };

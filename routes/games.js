@@ -1,9 +1,19 @@
-
 var express = require('express');
 var app = express.Router();
 
-var Board = require('../models').Board;  //adding the .Board means we dont have to write models.Board everywhere
-var User = require('../models').User;
+var board = require('../models').board;  //adding the .Board means we dont have to write models.Board everywhere
+var user = require('../models').user;
+
+app.param('game_id', function(req, res, next) {
+  board.findById(req.params.game_id).then(function(b) {
+    if (b) {
+      req.board = res.locals.board = b;
+      next();
+    } else {
+      res.status(404).send('Game not found');
+    }
+  });
+});
 
 var accepts = {
   'json': 'application/json',
@@ -15,44 +25,41 @@ app.param('format', function checkFormat(req, res, next, param) {
   next();
 });
 
-app.param('game_id', function(req, res, next) {
-  Board.findById(req.params.game_id).then(function(board) {
-    if(board) {
-      req.board = res.locals.board = board;
-      next();
-    } else {
-      res.status(404).send('Game not found');
-    }
-  });
-});
-
 app.get('/', function(req, res) {
-  Board.findAll().then(function(boards) {
-    res.format({
-      html: function() {
-        res.render('games', { boards: boards });
-      },
-      json: function() {
-        res.json(boards);
-      }
-    });
+    board.findAll().then(function(boards) {
+      res.format({
+          html: function() {
+            res.render('games', { boards: boards });
+          },
+          json: function() {
+            res.json(boards);
+          }
+      });
       // if (req.session.user_id) {
-      //   User.findById(req.session.user_id).then(function(user) {
+      //   user.findById(req.session.user_id).then(function(user) {
       //     res.render('games', { boards: boards, user: user });
       //   });
       // } else {
       //   res.render('games', { boards: boards });
       // }
+    });
+});
+
+app.get('/available', function(req, res) {
+  board.scope('available').findAll().then(function(boards) {
+    res.render('games', { title: "Available Games",
+                          boards: boards });
   });
 });
 
+// create a fresh new game
 app.post('/', function(req, res) {
-    Board.create({ board: req.body.board })
+    board.create({ board: '         ' }) //{ board: req.body.board })
         .then(function(board) {
             res.redirect('/games/' + board.id);
         })
         .catch(function(errors) {
-            Board.findAll().then(function(boards) {
+            board.findAll().then(function(boards) {
                 res.render('games', { boards: boards, errors: errors });
             });
             //req.alert('Initial board state must consiste of exactly 9 characters of which only [XO ] are allowed');
@@ -61,18 +68,18 @@ app.post('/', function(req, res) {
 });
 
 app.get('/:game_id.:format?', function(req, res) {
-    res.format({
-        html: function() {
-          res.render('individualGame');
-        },
-        json: function() {
-          res.json(req.board);
-        }
+  res.format({
+      html: function() {
+        res.render('individualGame');
+      },
+      json: function() {
+        res.json(req.board);
+      }
   });
+});
 
-    // Board.findById(req.params.game_id).then(function(board) {
-    //     res.render('individualGame', { board: board });
-    // });
+app.get('/:game_id/players', function(req, res) {
+  res.render('gamePlayers');
 });
 
 app.post('/:game_id', function(req, res) {
@@ -86,19 +93,39 @@ app.post('/:game_id', function(req, res) {
         res.json(board);
       }
     });
+  })
+  .catch(function(error) {
+    res.format({
+      html: function() {
+        res.flash('error', error.message);
+        req.session.save(function() {
+          res.redirect('/games/' + req.board.id);
+        });
+      },
+      json: function() {
+        res.json(error);
+      }
+    });
   });
 });
 
-// app.post('/:game_id', function(req, res) {
-//     Board.findById(req.params.game_id).then(function(board) {
-//         board.updateAttributes({
-//             board: req.params.board
-//         });
-//     });
-//     // Board.update({id: req.body.board.id, board: req.body.board })
-//     //     .then(function(board) {
-//     //         res.redirect('/games/');
-//     //     })
-// });
+
+app.post('/:game_id/join', function(req, res) {
+  if (!req.currentUser) {
+    res.flash('warning', 'You need to be logged in to join a game');
+    res.redirect('/games/' + req.board.id);
+  } else {
+    console.log('Adding user ' + req.currentUser.username + ' to game #' + req.board.id);
+    if (req.body.asX) {
+      req.board.setXPlayer(req.currentUser).then(function() {
+        // render something
+      });
+    } else {
+      req.board.setOPlayer(req.currentUser).then(function() {
+        // render something
+      });
+    }
+  }
+});
 
 module.exports = app;
