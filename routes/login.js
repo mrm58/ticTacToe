@@ -7,7 +7,7 @@ app.get('/', function(req, res) {
   if (req.currentUser) {
     req.flash('info', "You've ALREADY logged in!");
     req.session.save(function() {
-      res.redirect('../games');
+      res.redirect('/games');
     });
   } else {
     res.render('login');
@@ -20,28 +20,64 @@ app.post('/', function(req, res) {
       if (user) {
         if (user.password === req.body.password) {
           if (user.banned) {
-            req.flash('fail', "Umm...you've been banned.  You probably know why");
+            //req.flash('fail', "Umm...you've been banned.  You probably know why");
             req.session.save(function() {
-              res.redirect('/login');
+              res.format({
+                html: function() {
+                  req.flash('fail', "Umm...you've been banned.  You probably know why");
+                  res.redirect('/games');
+                },
+                json: function() {
+                  res.json({ success: false, errors: 'You\'ve been banned...' });
+                }
+              });
+              //res.redirect('/login');
             });
           }
-          else {
+          else { //user.banned
             req.session.user_id = user.id;
-            req.flash('success', "Logged in!");
+            //req.flash('success', "Logged in!");
             req.session.save(function() {
-              res.redirect('/games');
+              res.format({
+                html: function() {
+                  req.flash('success', 'Logged in!');
+                  res.redirect('/games');
+                },
+                json: function() {
+                  res.json({ success: true, message: 'Logged in!' });
+                }
+              });
+              //res.redirect('/games');
             });
           }
         } else { // user.password === req.body.password
-          req.flash('warning', 'Bad password. Try ' + user.password + ' instead.');
+          req.flash('warning', 'Bad password');
           req.session.save(function() {
-            res.redirect('/login');
+            res.format({
+              html: function() {
+                req.flash('warning', 'Bad password');
+                res.redirect('/login');
+              },
+              json: function() {
+                res.json({ success: false, errors: 'Bad password' });
+              }
+            });
+            //res.redirect('/login');
           });
         }
       } else { // user
         req.flash('warning', 'Username unknown');
         req.session.save(function() {
-          res.redirect('/login');
+          res.format({
+            html: function() {
+              req.flash('warning', 'Username unknown');
+              res.redirect('/login');
+            },
+            json: function() {
+              res.json({ success: false, errors: 'Username unknown' });
+            }
+          });
+          //res.redirect('/login');
         });
       }
     });

@@ -19,22 +19,37 @@ app.post('/', function(req, res) {
   user.find( { where: { username: req.body.username } } )
     .then(function(u) {
       if(u) {
-        req.flash('warning', "Username already exists");
-        req.session.save(function() {
-          res.redirect('/register');
-        });
-      } else {
-        user.create(req.body)  //Assumes the parameter names match the DB column names
-          .then(function(newUser) {
-            req.session.user_id = newUser.id;
-            req.session.save(function() {
-              res.redirect('../games');
-            });
+        req.session.save( function() {
+          res.format({
+            html: function() {
+              req.flash('warning', "Username already exists");
+              res.redirect('/register');
+            },
+            json: function() {
+              res.json({success: false, errors: 'Username already exists'});
+            }
           });
-        // req.flash('warning', "Username does NOT already exist! YAY!");
+        });
+        // req.flash('warning', "Username already exists");
         // req.session.save(function() {
         //   res.redirect('/register');
         // });
+      } else {
+        user.create(req.body)
+          .then(function(newUser) {
+            req.session.user_id = newUser.id;
+            req.session.save(function() {
+              res.format({
+                html: function() {
+                  res.redirect('/games');
+                },
+                json: function() {
+                  res.json({success: true});
+                }
+              });
+              // res.redirect('/games');
+            });
+          });
       }
       //res.send(JSON.stringify(user));
     });

@@ -4,6 +4,8 @@ block title
   title User List
 
 block content
+  include ./partials/users.jade
+//-
   div.container
     h1 All the Players!
     div.form-group
@@ -14,7 +16,11 @@ block content
         each user in users
           li
             a(href="/users/#{user.username}") #{user.username}
-      //-
-        ul(ng-controller="BoardsController as userList")
-          li(ng-repeat="username in userList.username track by userList.id")
-            a(href="/games/{{ board.id }}") Game {{ '#' + board.id }}
+    div.row
+      div.col-md-11
+        if(previousPage)
+          a(href="/users?page=#{previousPage}" align='left') Page #{previousPage}
+      if(nextPage)
+        div.col-md-1
+          a(href="/users?page=#{nextPage}" align='right') Page #{nextPage}
+

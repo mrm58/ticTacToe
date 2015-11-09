@@ -1,5 +1,6 @@
 var express = require('express');
-var app = express();
+//var app = express();
+var app = exports.app = express();
 
 // require('express-debug')(app, {});
 
@@ -56,16 +57,19 @@ app.set('view engine', 'jade');
 
 app.use(require('./routes'));
 
+if (process.env.NODE_ENV !== 'test') {
+  var server = exports.server = app.listen(app.get('port'), function() {
+    var host = server.address().address;
+    var port = server.address().port;
 
-//Login page -> game w/ session
-// /users list
-//logout page -> req.session.destroy(function(){...})
-//req.params uses parameters on the URL
-//req.body uses parameters that are passed via the post
-//var server = app.listen(3000, function() {
-var server = app.listen(app.get('port'), function() {
-  var host = server.address().address;
-  var port = server.address().port;
+    console.log('Example app listening at http://%s:%s', host, port);
+  });
+}
 
-  console.log('Example app listening at http://%s:%s', host, port);
-});
+// //var server = app.listen(3000, function() {
+// var server = app.listen(app.get('port'), function() {
+//   var host = server.address().address;
+//   var port = server.address().port;
+
+//   console.log('Example app listening at http://%s:%s', host, port);
+// });

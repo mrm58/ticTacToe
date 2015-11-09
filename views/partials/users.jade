@@ -1,0 +1,19 @@
+div.container
+  h1 All the Players!
+  form.form-inline
+    div.form-group
+      label(for='userSearchText') Search Players: 
+        input.form-control(type="text", name = 'userSearchText', id='userSearchText')
+    button.btn.btn-default(type="submit") Search
+  ul
+    if(users)
+      each user in users
+        li
+          a(href="/users/#{user.username}") #{user.username}
+  div.row
+    div.col-md-11
+      if(previousPage)
+        a(href="/users?page=#{previousPage}") Page #{previousPage}
+    if(nextPage)
+      div.col-md-1
+        a(href="/users?page=#{nextPage}") Page #{nextPage}
