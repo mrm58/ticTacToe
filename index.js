@@ -57,6 +57,10 @@ app.set('view engine', 'jade');
 
 app.use(require('./routes'));
 
+if (app.get('env') === 'development') {
+  app.locals.pretty = true;
+} //is used to make what comes back from Curl requests more user friendly
+
 if (process.env.NODE_ENV !== 'test') {
   var server = exports.server = app.listen(app.get('port'), function() {
     var host = server.address().address;

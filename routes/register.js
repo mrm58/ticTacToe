@@ -16,43 +16,46 @@ app.get('/', function(req, res) {
 
 app.post('/', function(req, res) {
   // Does the user exist already?
-  user.find( { where: { username: req.body.username } } )
-    .then(function(u) {
-      if(u) {
-        req.session.save( function() {
-          res.format({
-            html: function() {
-              req.flash('warning', "Username already exists");
-              res.redirect('/register');
-            },
-            json: function() {
-              res.json({success: false, errors: 'Username already exists'});
-            }
-          });
-        });
-        // req.flash('warning', "Username already exists");
-        // req.session.save(function() {
-        //   res.redirect('/register');
-        // });
-      } else {
-        user.create(req.body)
-          .then(function(newUser) {
-            req.session.user_id = newUser.id;
-            req.session.save(function() {
-              res.format({
-                html: function() {
-                  res.redirect('/games');
-                },
-                json: function() {
-                  res.json({success: true});
-                }
-              });
-              // res.redirect('/games');
+  if(!req.body.password) {
+    req.flash('warning', 'Password required');
+    req.session.save(function() {
+      res.render('register');
+    });
+  } else {
+    user.find( { where: { username: req.body.username } } )
+      .then(function(u) {
+        if(u) {
+          req.session.save( function() {
+            res.format({
+              html: function() {
+                req.flash('warning', 'Username already exists');
+                res.render('register');
+              },
+              json: function() {
+                res.json({success: false, errors: 'Username already exists'});
+              }
             });
           });
-      }
-      //res.send(JSON.stringify(user));
-    });
+        } else {
+          user.create(req.body)
+            .then(function(newUser) {
+              req.session.user_id = newUser.id;
+              req.session.save(function() {
+                res.format({
+                  html: function() {
+                    res.redirect('/games');
+                  },
+                  json: function() {
+                    res.json({success: true});
+                  }
+                });
+                // res.redirect('/games');
+              });
+            });
+        }
+        //res.send(JSON.stringify(user));
+      });
+  }
 });
 
 module.exports = app;

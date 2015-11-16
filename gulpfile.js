@@ -29,13 +29,24 @@ gulp.task('test:frontend', function(done) {
 });
 
 var mocha = require('gulp-mocha');
-gulp.task('test:backend', function() {
+var istanbul = require('gulp-istanbul');
+
+gulp.task('test:backend:pre', function() {
+    return gulp.src(srcFiles)
+        .pipe(istanbul())
+        .pipe(istanbul.hookRequire());
+});
+
+gulp.task('test:backend', ['test:backend:pre'], function() {
     return gulp.src('test/back-end/**/*.js', { read: false })
-        .pipe(mocha());
+        .pipe(mocha())
+        .pipe(istanbul.writeReports());
 });
 
 gulp.task('watch:test:backend', function() {
-    return gulp.watch(srcFiles.concat(['test/back-end/**/*.js']), { read: false }, ['test:backend']);
+    process.env.NODE_ENV = "test";
+    gulp.run('test:backend');
+    return gulp.watch(srcFiles.concat(['test/back-end/**/*.js']), ['test:backend']);
 });
 
 gulp.task('watch:test:frontend', function(done) {
@@ -43,5 +54,17 @@ gulp.task('watch:test:frontend', function(done) {
         configFile: __dirname + '/karma.conf.js'
     }, done).start();
 });
+
+// var webFiles = ['js/**/*.js'];
+// var concat = require('gulp-concat');
+// var ngAnnotate = require('gulp-ng-annotate');
+// var uglify = require('gulp-uglify');
+// gulp.task('build', function() {
+//   return gulp.src(webFiles)
+//     .pipe(concat('tictactoe.js'))
+//     .pipe(ngAnnotate())
+//     .pipe(uglify())
+//     .pipe(gulp.dest('public/dist'));
+// });
 
 gulp.task('default', ['server']);

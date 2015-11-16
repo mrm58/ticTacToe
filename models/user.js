@@ -16,7 +16,13 @@ module.exports = function(sequelize, DataTypes) {
     //     notNull: true
     //   }
     // },
-    password: DataTypes.STRING,
+    password: {
+      type: DataTypes.STRING,
+      // validate: {
+      //   notNull: true
+      // }
+    },
+    banned: DataTypes.BOOLEAN,
     email: DataTypes.STRING,
     emailKey: DataTypes.STRING
   }, {
