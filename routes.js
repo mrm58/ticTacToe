@@ -24,6 +24,11 @@ app.use(function(req, res, next) {
 var roles = require('./roles');
 app.use(roles.middleware({ userProperty: 'currentUser' }));
 
+var uploadManager = require('./routes/uploadManager')(app);
+app.get('/upload-manager', function(req, res) {
+  res.render('uploadManager');
+});
+
 app.get('/', function(req, res) {
   res.render('index');
 });
@@ -60,6 +65,7 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/partials/:name', function(req, res) {
+  console.log('render partials/' + req.params.name);
   res.render('partials/' + req.params.name);
 });
 

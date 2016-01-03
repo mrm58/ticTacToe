@@ -1,16 +1,15 @@
-//form(name="login", method="post", action="/login")
-  h1 Login Information
+h1 Login Information
 
-  form(name="userLogin", action="/login", method="post")
-    div.form-group
-      label Username
-      input.form-control(type="text", name="username")
-      label Password
-      input.form-control(type="password", name="password")
-    button.btn.btn-default(type="submit") Login
-    if(errors)
-      p.text-danger Username/Password combination unrecognized
-      //code= errors.message
-  p Not registered?  Do so 
-    a(href="/register") here
-    | !
+form(name="vm.login", ng-submit="vm.tryToLogin()")
+  div.form-group
+    label Username
+    input.form-control(type="text", name="username", ng-model='vm.username')
+    label Password
+    input.form-control(type="password", name="password", ng-model="vm.password")
+  button.btn.btn-default(type="submit") Login
+  if(errors)
+    p.text-danger Username/Password combination unrecognized
+    //code= errors.message
+p Not registered?  Do so 
+  a(href="/register") here
+  | !

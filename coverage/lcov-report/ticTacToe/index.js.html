@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for ticTacToe/index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">ticTacToe/</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">78.13% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>25/32</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">62.5% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>5/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/1</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">78.13% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>25/32</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var express = require('express');
+//var app = express();
+var app = exports.app = express();
+&nbsp;
+// require('express-debug')(app, {});
+&nbsp;
+app.use('/bower_components',
+  express.static(__dirname + '/bower_components'));
+app.use('/public', express.static(__dirname + '/public'));
+&nbsp;
+app.set('port', process.env.PORT || 3000);
+&nbsp;
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());     // what is this?
+app.use(bodyParser.urlencoded( {extended: false} ));
+var models = require('./models');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+&nbsp;
+app.use(cookieParser());
+<span class="missing-if-branch" title="if path not taken" >I</span>if (process.env.REDIS_URL) {
+<span class="cstat-no" title="statement not covered" >  var RedisStore = require('connect-redis')(session);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  app.use(session({</span>
+    store: new RedisStore({ url: process.env.REDIS_URL }),
+    secret: 'I see undead people',
+    saveUninitialized: false,
+    resave: false
+  }));
+} else {
+  var Sequelize = require('sequelize');
+  var SequelizeStore = require('connect-session-sequelize')(session.Store);
+&nbsp;
+  var sequelize = new Sequelize(
+    "database",
+    "username",
+    "password", {
+      "dialect": "sqlite",
+      "storage": "./store/session.sqlite"
+    });
+&nbsp;
+  var store = new SequelizeStore({ db: sequelize });
+  store.sync();
+  app.use(session({
+    saveUninitialized: false,
+    resave: false,
+    secret: 'I see dead people',
+    store: store
+  }));
+}
+&nbsp;
+app.use(require('flash')());
+&nbsp;
+app.use(require('morgan')('dev'));    // what is this?
+&nbsp;
+app.set('view engine', 'jade');
+&nbsp;
+app.use(require('./routes'));
+&nbsp;
+<span class="missing-if-branch" title="if path not taken" >I</span>if (app.get('env') === 'development') {
+<span class="cstat-no" title="statement not covered" >  app.locals.pretty = true;</span>
+} //is used to make what comes back from Curl requests more user friendly
+&nbsp;
+<span class="missing-if-branch" title="if path not taken" >I</span>if (process.env.NODE_ENV !== 'test') {
+<span class="cstat-no" title="statement not covered" >  var server = exports.server = app.listen(app.get('port'), <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >    var host = server.address().address;</span>
+<span class="cstat-no" title="statement not covered" >    var port = server.address().port;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    console.log('Example app listening at http://%s:%s', host, port);</span>
+  });
+}
+&nbsp;
+// //var server = app.listen(3000, function() {
+// var server = app.listen(app.get('port'), function() {
+//   var host = server.address().address;
+//   var port = server.address().port;
+&nbsp;
+//   console.log('Example app listening at http://%s:%s', host, port);
+// });
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Nov 11 2015 20:49:17 GMT-0500 (EST)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

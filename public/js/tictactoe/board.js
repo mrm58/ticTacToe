@@ -112,8 +112,11 @@ angular.module('bewd.tictactoe.board')
     return {
       getBoards: function() {
         // AJAX request
+        console.log('in boardService getBoards factory function');
         return $http.get('/games')
           .then(function(response) {
+            console.log('boardService getBoards get promise return');
+            console.log('response.data is ' + response.data);
             return response.data;
           });
       },
@@ -152,12 +155,14 @@ angular.module('bewd.tictactoe.board')
     };
 
     function loadBoards() {
+      console.log('in loadBoards()');
       boardService.getBoards().then(function(boards) {
         $log.debug("boards response is ", boards);
         vm.boards = boards;
       });
     }
 
+    console.log('in BoardsController, about to call loadBoards()');
     loadBoards();
     var boardLoader = $interval(loadBoards, 10000);
     $scope.$on('$destroy', function() {

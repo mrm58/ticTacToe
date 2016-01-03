@@ -3,16 +3,16 @@ var app = express.Router();
 
 var user = require('../models').user;  //adding the .User means we dont have to write models.User everywhere
 
-app.get('/', function(req, res) {
-  if (req.currentUser) {
-    req.flash('info', "You've ALREADY logged in!");
-    req.session.save(function() {
-      res.redirect('/games');
-    });
-  } else {
-    res.render('login');
-  }
-});
+// app.get('/', function(req, res) {
+//   if (req.currentUser) {
+//     req.flash('info', "You've ALREADY logged in!");
+//     req.session.save(function() {
+//       res.redirect('/games');
+//     });
+//   } else {
+//     res.render('login');
+//   }
+// });
 
 app.post('/', function(req, res) {
   if(!req.body.username || ! req.body.password) {

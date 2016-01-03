@@ -2,16 +2,28 @@
 
   angular.module('bewd.tictactoe', ['bewd.tictactoe.board', 'bewd.tictactoe.registration', 'ngRoute'])
     .config(
-      function($routeProvider) {
+      function($locationProvider, $routeProvider) {
+        $locationProvider.html5Mode(true);
         $routeProvider.when('/login', {
           templateUrl: '/partials/login',
           controller: 'LoginController',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          bindToController: true
         });
         $routeProvider.when('/users', {
           templateUrl: '/partials/users',
-          //controller: 'LoginController',
-          //controllerAs: 'vm'
+          // controller: {
+          //   usersController: function($http, $location, $rootScope) {
+          //     var vm = this;
+
+          //   // AJAX request
+          //   return $http.get('/users')
+          //     .then(function(response) {
+          //       return response.data;
+          //     });
+          //   }
+          // },
+          controllerAs: 'vm'
         });
         $routeProvider.when('/games', {
           //

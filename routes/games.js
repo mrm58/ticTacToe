@@ -21,17 +21,21 @@ var accepts = {
 };
 
 app.param('format', function checkFormat(req, res, next, param) {
+  console.log('checking format param: ' + param);
   req.headers.accept = accepts[param];
   next();
 });
 
 app.get('/', function(req, res) {
+    console.log('in games route base getter');
     board.findAll().then(function(boards) {
       res.format({
           html: function() {
+            console.log('in html return format');
             res.render('games', { boards: boards });
           },
           json: function() {
+            console.log('in json return format');
             res.json(boards);
           }
       });

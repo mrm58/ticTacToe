@@ -1,0 +1,22 @@
+extends ./layout.jade
+
+block title
+  title
+    | Upload Manager
+
+block content
+  div.row
+    div.col-md-6
+      h1
+        | Picture Upload Manager
+      form(action="/upload-pic" method="post" enctype="multipart/form-data" accept="file/image")
+        input(type="file" name="file" id="file")
+        br
+        input(type="submit" name="submit" value="Submit")
+    div.col-md-6
+      h1
+        | Board Upload Manager
+      form(action="/upload-board" method="post" enctype="multipart/form-data" accept="file/text")
+        input(type="file" name="file" id="file")
+        br
+        input(type="submit" name="submit" value="Submit")
